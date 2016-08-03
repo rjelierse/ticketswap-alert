@@ -1,22 +1,21 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/namsral/microdata"
 	"log"
 	"strconv"
 	"time"
-	"flag"
 )
 
 type options struct {
-	Interval time.Duration
-	EventURL string
+	Interval   time.Duration
+	EventURL   string
 	PriceLimit int
 }
 
-var opt = options{
-}
+var opt = options{}
 
 func init() {
 	flag.DurationVar(&opt.Interval, "interval", time.Minute, "The interval at which to check for tickets")
@@ -47,6 +46,10 @@ func ping() {
 	data, err := microdata.ParseURL(opt.EventURL)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if len(data.Items) == 0 {
+		log.Fatal("You are probably blocked for refreshing too often.")
 	}
 
 	tickets := data.Items[0].Properties["tickets"]
