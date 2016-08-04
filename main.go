@@ -34,7 +34,7 @@ func init() {
 }
 
 func main() {
-	ticker := time.NewTicker(time.Minute)
+	ticker := time.NewTicker(opt.Interval)
 	defer ticker.Stop()
 
 	for range ticker.C {
